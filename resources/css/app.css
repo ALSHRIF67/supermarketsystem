@@ -1,0 +1,31 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Outfit', 'Noto Kufi Arabic', ui-sans-serif, system-ui, sans-serif;
+}
+
+@media print {
+    .no-print { display: none !important; }
+    .print-only { display: block !important; }
+    
+    @page {
+        margin: 0;
+        size: 80mm auto;
+    }
+
+    body {
+        width: 80mm;
+        margin: 0;
+        padding: 5mm;
+        font-size: 12pt;
+    }
+
+    .receipt {
+        width: 100%;
+    }
+}

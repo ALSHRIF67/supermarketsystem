@@ -10,7 +10,7 @@ class Product extends Model
         'category_id', 'name', 'slug', 'barcode', 'description',
         'purchase_price', 'sale_price', 'wholesale_price',
         'stock_quantity', 'low_stock_threshold', 'expiry_date',
-        'image_path', 'is_active'
+        'is_active'
     ];
 
     protected $casts = [
@@ -21,6 +21,11 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function saleItems()
+    {
+        return $this->hasMany(SaleItem::class);
     }
 
     public function scopeLowStock($query)

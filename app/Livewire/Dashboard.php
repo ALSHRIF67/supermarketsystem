@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Sale;
 use App\Models\Customer;
 use App\Models\Supplier;
+use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Component
 {
@@ -17,7 +18,13 @@ class Dashboard extends Component
             'totalOrders' => Sale::whereDate('created_at', today())->count(),
             'lowStockCount' => Product::lowStock()->count(),
             'expiringSoonCount' => Product::expiringSoon()->count(),
-            'topProducts' => Product::withCount('category')->orderBy('stock_quantity', 'desc')->take(5)->get(), // Placeholder logic
+            'topProducts' => Product::with('category')
+                ->withCount(['saleItems as sold_count' => function($query) {
+                    $query->select(DB::raw('sum(quantity)'));
+                }])
+                ->orderBy('sold_count', 'desc')
+                ->take(5)
+                ->get(),
         ])->layout('layouts.app');
     }
 }

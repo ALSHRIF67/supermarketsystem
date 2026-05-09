@@ -92,7 +92,7 @@ class POS extends Component
             return;
         }
 
-        DB::transaction(function () {
+        $saleData = DB::transaction(function () {
             $sale = Sale::create([
                 'user_id' => auth()->id(),
                 'customer_id' => $this->selectedCustomer,
@@ -106,6 +106,7 @@ class POS extends Component
                 'payment_status' => 'paid',
             ]);
 
+            $items = [];
             foreach ($this->cart as $item) {
                 SaleItem::create([
                     'sale_id' => $sale->id,
@@ -115,14 +116,42 @@ class POS extends Component
                     'subtotal' => $item['price'] * $item['quantity'],
                 ]);
 
+                $items[] = [
+                    'name' => $item['name'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'subtotal' => $item['price'] * $item['quantity'],
+                ];
+
                 // Update stock
                 $product = Product::find($item['id']);
                 $product->decrement('stock_quantity', $item['quantity']);
             }
+
+            $paymentMethods = [
+                'cash' => 'نقداً',
+                'card' => 'بطاقة',
+                'credit' => 'آجل',
+            ];
+
+            return [
+                'invoice_number' => $sale->invoice_number,
+                'date' => $sale->created_at->format('Y-m-d H:i'),
+                'customer' => $sale->customer ? $sale->customer->name : 'عميل نقدي',
+                'items' => $items,
+                'subtotal' => $sale->total_amount,
+                'discount' => $sale->discount_amount,
+                'tax' => $sale->tax_amount,
+                'total' => $sale->total_amount,
+                'payable' => $sale->payable_amount,
+                'payment_method' => $paymentMethods[$sale->payment_method] ?? $sale->payment_method,
+                'cashier' => auth()->user()->name,
+            ];
         });
 
         $this->cart = [];
         $this->calculateTotals();
+        $this->dispatch('sale-completed', saleData: $saleData);
         $this->dispatch('notify', ['type' => 'success', 'message' => 'Sale completed successfully!']);
     }
 

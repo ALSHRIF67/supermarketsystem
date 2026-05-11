@@ -3,55 +3,90 @@
 @section('content')
 <style>
     @media print {
-        /* Reset and Base Styles */
         @page {
+            size: 80mm auto;
             margin: 0;
-            size: auto;
         }
-        body {
-            background: white !important;
-            color: black !important;
+        
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            box-shadow: none !important;
+            text-shadow: none !important;
+            font-family: 'Arial', sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        html, body {
+            overflow: visible !important;
+            height: auto !important;
             margin: 0 !important;
             padding: 0 !important;
-            -webkit-print-color-adjust: exact;
+            background: white !important;
+            width: 100% !important;
         }
-        .no-print {
-            display: none !important;
-        }
-        .print-only {
-            display: block !important;
-        }
+
+        .no-print { display: none !important; }
         
-        /* Receipt Layout Optimization */
+        main {
+            padding: 0 !important;
+            margin: 0 !important;
+            display: block !important;
+            width: 100% !important;
+        }
+
         .receipt-container {
             width: 100% !important;
-            max-width: 80mm !important; /* Standard Thermal Receipt Width */
-            margin: 0 auto !important;
-            padding: 5mm !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 4mm 2mm !important;
             box-shadow: none !important;
             border: none !important;
+            border-radius: 0 !important;
         }
-        
+
+        .receipt-container * {
+            color: #000 !important;
+            font-size: 10px !important;
+        }
+
+        .receipt-container h1 {
+            font-size: 16px !important;
+            margin-bottom: 1mm !important;
+        }
+
         table {
             width: 100% !important;
             border-collapse: collapse !important;
         }
-        th, td {
-            font-size: 10pt !important;
-            padding: 4px 0 !important;
-            border-bottom: 1px dashed #eee !important;
+
+        th {
+            border-bottom: 1px dashed #000 !important;
+            padding: 1mm 0 !important;
+            font-size: 9px !important;
         }
-        .font-bold {
-            font-weight: bold !important;
+
+        td {
+            padding: 1.5mm 0 !important;
+            border-bottom: 0.5px solid #eee !important;
         }
-        .text-center { text-align: center !important; }
-        .text-left { text-align: left !important; }
-        .text-right { text-align: right !important; }
-        
-        /* Force RTL in print */
-        html[dir="rtl"] body {
-            direction: rtl !important;
-            text-align: right !important;
+
+        .text-2xl, .text-3xl {
+            font-size: 14px !important;
+        }
+
+        .text-indigo-600 {
+            color: #000 !important;
+            font-weight: 900 !important;
+            font-size: 14px !important;
+        }
+
+        /* Support for smaller printers (58mm) */
+        @media (max-width: 58mm) {
+            .receipt-container {
+                width: 58mm !important;
+            }
         }
     }
 </style>

@@ -38,4 +38,9 @@ class Product extends Model
         return $query->where('expiry_date', '<=', now()->addMonths(3))
                      ->where('expiry_date', '>', now());
     }
+
+    public function inventories()
+    {
+        return $this->hasMany(Inventory::class);
+    }
 }

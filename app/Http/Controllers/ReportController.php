@@ -34,6 +34,8 @@ class ReportController extends Controller
             ->take(5)
             ->get();
 
-        return view('reports.index', compact('totalSales', 'totalExpenses', 'netProfit', 'dailySales', 'topProducts', 'startDate', 'endDate'));
+        $lowStockProducts = Product::lowStock()->get();
+        
+        return view('reports.index', compact('totalSales', 'totalExpenses', 'netProfit', 'dailySales', 'topProducts', 'lowStockProducts', 'startDate', 'endDate'));
     }
 }

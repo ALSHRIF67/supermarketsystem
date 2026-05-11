@@ -24,7 +24,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('products', \App\Http\Controllers\ProductController::class);
     // Inventory Management
     Route::get('/inventory', [\App\Http\Controllers\InventoryController::class, 'index'])->name('inventory.index');
-    Route::patch('/inventory/{product}', [\App\Http\Controllers\InventoryController::class, 'updateStock'])->name('inventory.update');
+    Route::post('/inventory/stock-in', [\App\Http\Controllers\InventoryController::class, 'stockIn'])->name('inventory.stock-in');
+    Route::post('/inventory/stock-out', [\App\Http\Controllers\InventoryController::class, 'stockOut'])->name('inventory.stock-out');
+    Route::post('/inventory/transfer', [\App\Http\Controllers\InventoryController::class, 'transfer'])->name('inventory.transfer');
+    Route::post('/inventory/adjustment', [\App\Http\Controllers\InventoryController::class, 'adjustment'])->name('inventory.adjustment');
     
     // Sales Management
     Route::get('/sales', [\App\Http\Controllers\SaleController::class, 'index'])->name('sales.index');

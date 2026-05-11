@@ -20,6 +20,26 @@ class POS extends Component
     public $customers = [];
     public $selectedCustomer = null;
     public $paymentMethod = 'cash';
+    
+    protected $listeners = [
+        'productUpdated' => 'refreshCartData',
+        'cartUpdated' => 'calculateTotals'
+    ];
+
+    // New properties for editing/deleting products
+    public $editingProduct = null;
+    public $editingProductData = [
+        'id' => null,
+        'name' => '',
+        'barcode' => '',
+        'category_id' => '',
+        'purchase_price' => 0,
+        'sale_price' => 0,
+        'stock_quantity' => 0,
+        'low_stock_threshold' => 0,
+        'expiry_date' => '',
+    ];
+    public $showEditModal = false;
 
     public function mount()
     {
@@ -76,6 +96,93 @@ class POS extends Component
         $this->calculateTotals();
     }
 
+    // New: Edit product directly from POS
+    public function editProduct($productId)
+    {
+        $product = Product::findOrFail($productId);
+        $this->editingProductData = [
+            'id' => $product->id,
+            'name' => $product->name,
+            'barcode' => $product->barcode,
+            'category_id' => $product->category_id,
+            'purchase_price' => $product->purchase_price,
+            'sale_price' => $product->sale_price,
+            'stock_quantity' => $product->stock_quantity,
+            'low_stock_threshold' => $product->low_stock_threshold,
+            'expiry_date' => $product->expiry_date ? $product->expiry_date->format('Y-m-d') : '',
+        ];
+        $this->showEditModal = true;
+    }
+
+    public function updateProduct()
+    {
+        $this->validate([
+            'editingProductData.name' => 'required|string|max:255',
+            'editingProductData.category_id' => 'required|exists:categories,id',
+            'editingProductData.barcode' => 'nullable|string|unique:products,barcode,' . $this->editingProductData['id'],
+            'editingProductData.purchase_price' => 'required|numeric|min:0',
+            'editingProductData.sale_price' => 'required|numeric|min:0',
+            'editingProductData.stock_quantity' => 'required|integer|min:0',
+            'editingProductData.low_stock_threshold' => 'nullable|integer|min:0',
+            'editingProductData.expiry_date' => 'nullable|date',
+        ]);
+
+        $product = Product::findOrFail($this->editingProductData['id']);
+        $product->update([
+            'name' => $this->editingProductData['name'],
+            'slug' => \Illuminate\Support\Str::slug($this->editingProductData['name'], '-', null), // Support UTF-8/Arabic
+            'barcode' => $this->editingProductData['barcode'],
+            'category_id' => $this->editingProductData['category_id'],
+            'purchase_price' => $this->editingProductData['purchase_price'],
+            'sale_price' => $this->editingProductData['sale_price'],
+            'stock_quantity' => $this->editingProductData['stock_quantity'],
+            'low_stock_threshold' => $this->editingProductData['low_stock_threshold'],
+            'expiry_date' => $this->editingProductData['expiry_date'],
+        ]);
+
+        // Sync with cart if product is in cart
+        if (isset($this->cart[$product->id])) {
+            $this->cart[$product->id]['name'] = $product->name;
+            $this->cart[$product->id]['price'] = $product->sale_price;
+        }
+
+        $this->calculateTotals();
+        $this->showEditModal = false;
+        $this->dispatch('productUpdated');
+        $this->dispatch('notify', ['type' => 'success', 'message' => 'تم تحديث المنتج بنجاح!']);
+    }
+
+    // New: Delete product from system
+    public function deleteProduct($productId)
+    {
+        $product = Product::findOrFail($productId);
+        
+        // Remove from cart if exists
+        if (isset($this->cart[$productId])) {
+            unset($this->cart[$productId]);
+            $this->calculateTotals();
+        }
+
+        $product->delete();
+        $this->dispatch('productUpdated');
+        $this->dispatch('notify', ['type' => 'success', 'message' => 'تم حذف المنتج بنجاح!']);
+    }
+
+    public function refreshCartData()
+    {
+        foreach ($this->cart as $productId => $item) {
+            $product = Product::find($productId);
+            if ($product) {
+                $this->cart[$productId]['name'] = $product->name;
+                $this->cart[$productId]['price'] = $product->sale_price;
+            } else {
+                // Product was deleted
+                unset($this->cart[$productId]);
+            }
+        }
+        $this->calculateTotals();
+    }
+
     public function calculateTotals()
     {
         $this->total = collect($this->cart)->sum(function ($item) {
@@ -125,7 +232,9 @@ class POS extends Component
 
                 // Update stock
                 $product = Product::find($item['id']);
-                $product->decrement('stock_quantity', $item['quantity']);
+                if ($product) {
+                    $product->decrement('stock_quantity', $item['quantity']);
+                }
             }
 
             $paymentMethods = [
@@ -166,7 +275,8 @@ class POS extends Component
         }
 
         return view('livewire.p-o-s', [
-            'searchResults' => $products
+            'searchResults' => $products,
+            'categories' => \App\Models\Category::all()
         ])->layout('layouts.app', ['header' => 'Point of Sale']);
     }
 }

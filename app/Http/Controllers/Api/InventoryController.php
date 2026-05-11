@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\Product;
-use App\Models\Warehouse;
-use App\Services\InventoryService;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\InventoryService;
 use Exception;
 
 class InventoryController extends Controller
@@ -15,27 +14,6 @@ class InventoryController extends Controller
     public function __construct(InventoryService $inventoryService)
     {
         $this->inventoryService = $inventoryService;
-    }
-
-    public function index(Request $request)
-    {
-        $query = Product::with(['category', 'inventories.warehouse']);
-
-        if ($request->filled('search')) {
-            $query->where(function($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('barcode', 'like', '%' . $request->search . '%');
-            });
-        }
-
-        if ($request->filter == 'low_stock') {
-            $query->whereColumn('stock_quantity', '<=', 'low_stock_threshold');
-        }
-
-        $products = $query->latest()->paginate(10);
-        $warehouses = Warehouse::all();
-
-        return view('inventory.index', compact('products', 'warehouses'));
     }
 
     public function stockIn(Request $request)
@@ -56,9 +34,9 @@ class InventoryController extends Controller
                 $request->reference,
                 $request->notes
             );
-            return back()->with('success', 'تم إضافة المخزون بنجاح');
+            return response()->json(['message' => 'تم توريد المخزون بنجاح']);
         } catch (Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
         }
     }
 
@@ -80,9 +58,9 @@ class InventoryController extends Controller
                 $request->reference,
                 $request->notes
             );
-            return back()->with('success', 'تم صرف المخزون بنجاح');
+            return response()->json(['message' => 'تم صرف المخزون بنجاح']);
         } catch (Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
         }
     }
 
@@ -104,9 +82,9 @@ class InventoryController extends Controller
                 $request->quantity,
                 $request->reference
             );
-            return back()->with('success', 'تم تحويل المخزون بنجاح');
+            return response()->json(['message' => 'تم التحويل بنجاح']);
         } catch (Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
         }
     }
 
@@ -128,9 +106,9 @@ class InventoryController extends Controller
                 $request->reference,
                 $request->notes
             );
-            return back()->with('success', 'تم تعديل المخزون (الجرد) بنجاح');
+            return response()->json(['message' => 'تم الجرد بنجاح']);
         } catch (Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
         }
     }
 }

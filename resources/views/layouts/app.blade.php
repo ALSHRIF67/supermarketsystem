@@ -17,21 +17,90 @@
     @livewireStyles
 
     <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --input-focus: #4f46e5;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
         body {
             font-family: 'Noto Kufi Arabic', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+        }
+        .form-input-group {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .form-input-group:focus-within label {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .custom-input {
+            width: 100%;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem 1rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #ffffff;
+        }
+        .custom-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            transform: translateY(-1px);
+        }
+        .custom-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2), 0 2px 4px -1px rgba(79, 70, 229, 0.1);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3), 0 4px 6px -2px rgba(79, 70, 229, 0.1);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        .form-card {
+            background: var(--card-bg);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         @media print {
             .no-print { display: none !important; }
             .print-only { display: block !important; }
-            body { background: white; }
-            .receipt { 
-                width: 100%; 
-                max-width: 80mm; 
-                margin: 0 auto; 
-                padding: 10px;
-                box-shadow: none;
-                border: none;
-            }
+            body { background: white !important; margin: 0 !important; padding: 0 !important; }
+            main { padding: 0 !important; margin: 0 !important; }
         }
     </style>
 </head>
@@ -154,5 +223,11 @@
     </div>
 
     @livewireScripts
+    <script>
+        window.addEventListener('notify', event => {
+            let data = event.detail[0] || event.detail;
+            alert(data.message);
+        });
+    </script>
 </body>
 </html>

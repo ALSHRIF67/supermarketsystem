@@ -1,55 +1,63 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-2xl mx-auto">
-    <div class="mb-6 flex items-center justify-between">
-        <h2 class="text-xl font-semibold text-slate-800">Add New Customer</h2>
-        <a href="{{ route('customers.index') }}" class="text-slate-500 hover:text-slate-700 text-sm font-medium transition-colors">
-            &larr; Back to List
+<div class="max-w-2xl mx-auto animate-fade-in">
+    <div class="mb-8 flex items-center justify-between">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800">إضافة عميل جديد</h2>
+            <p class="text-slate-500 mt-1">تسجيل بيانات العميل للتعاملات المستقبلية</p>
+        </div>
+        <a href="{{ route('customers.index') }}" class="flex items-center gap-2 text-slate-500 hover:text-indigo-600 font-medium transition-colors group">
+            <span class="group-hover:-translate-x-1 transition-transform">←</span>
+            العودة للقائمة
         </a>
     </div>
 
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+    <div class="form-card">
         <form action="{{ route('customers.store') }}" method="POST">
             @csrf
-            <div class="space-y-6">
-                <div>
-                    <label for="name" class="block text-sm font-medium text-slate-700 mb-1">Customer Name</label>
+            <div class="p-6 md:p-10 space-y-8">
+                <div class="form-input-group">
+                    <label for="name" class="custom-label">اسم العميل</label>
                     <input type="text" name="name" id="name" value="{{ old('name') }}" 
-                        class="w-full rounded-lg border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 @error('name') border-rose-500 @enderror"
-                        placeholder="e.g. Ahmed Ali" required>
+                        class="custom-input @error('name') border-rose-500 @enderror"
+                        placeholder="مثال: أحمد علي" required autofocus>
                     @error('name') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-input-group">
+                        <label for="email" class="custom-label">البريد الإلكتروني</label>
                         <input type="email" name="email" id="email" value="{{ old('email') }}" 
-                            class="w-full rounded-lg border-slate-200 focus:border-indigo-500 focus:ring-indigo-500"
+                            class="custom-input"
                             placeholder="customer@example.com">
                         @error('email') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
                     </div>
-                    <div>
-                        <label for="phone" class="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
+                    <div class="form-input-group">
+                        <label for="phone" class="custom-label">رقم الهاتف</label>
                         <input type="text" name="phone" id="phone" value="{{ old('phone') }}" 
-                            class="w-full rounded-lg border-slate-200 focus:border-indigo-500 focus:ring-indigo-500"
+                            class="custom-input"
                             placeholder="+249...">
                         @error('phone') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
-                <div>
-                    <label for="address" class="block text-sm font-medium text-slate-700 mb-1">Address</label>
+                <div class="form-input-group">
+                    <label for="address" class="custom-label">العنوان</label>
                     <textarea name="address" id="address" rows="3" 
-                        class="w-full rounded-lg border-slate-200 focus:border-indigo-500 focus:ring-indigo-500"
-                        placeholder="Customer's physical address...">{{ old('address') }}</textarea>
+                        class="custom-input"
+                        placeholder="عنوان السكن أو العمل...">{{ old('address') }}</textarea>
                 </div>
+            </div>
 
-                <div class="pt-4">
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">
-                        Register Customer
-                    </button>
-                </div>
+            <div class="px-6 py-6 md:px-10 bg-slate-50/50 border-t border-slate-100 flex flex-col md:flex-row items-center justify-end gap-4">
+                <a href="{{ route('customers.index') }}" class="text-slate-500 hover:text-slate-700 font-bold text-sm px-6 py-3 transition-colors order-2 md:order-1">
+                    إلغاء
+                </a>
+                <button type="submit" class="btn-primary w-full md:w-auto order-1 md:order-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                    تسجيل العميل
+                </button>
             </div>
         </form>
     </div>

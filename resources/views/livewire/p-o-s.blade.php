@@ -20,21 +20,31 @@
             <div class="p-6 border-b border-slate-100 font-bold text-slate-800 bg-slate-50/50 text-right">نتائج البحث</div>
             <div class="flex-1 overflow-y-auto p-4 space-y-3">
                 @forelse($searchResults as $product)
-                <button wire:click="addToCart({{ $product->id }})" class="w-full flex items-center gap-4 p-3 rounded-xl hover:bg-indigo-50 transition-colors text-right group">
-                    <div class="w-12 h-12 bg-slate-100 rounded-lg flex-shrink-0 group-hover:bg-white transition-colors flex items-center justify-center text-slate-400">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                <div class="flex items-center gap-2 w-full p-3 rounded-xl hover:bg-indigo-50 transition-colors group">
+                    <button wire:click="addToCart({{ $product->id }})" class="flex-1 flex items-center gap-4 text-right">
+                        <div class="w-12 h-12 bg-slate-100 rounded-lg flex-shrink-0 group-hover:bg-white transition-colors flex items-center justify-center text-slate-400">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                        </div>
+                        <div class="flex-1">
+                            <h5 class="text-sm font-bold text-slate-900">{{ $product->name }}</h5>
+                            <p class="text-xs text-slate-500">باركود: {{ $product->barcode }}</p>
+                        </div>
+                        <div class="text-left">
+                            <p class="text-sm font-bold text-indigo-600">${{ number_format($product->sale_price, 2) }}</p>
+                            <p class="text-[10px] uppercase font-bold {{ $product->stock_quantity <= 5 ? 'text-rose-500' : 'text-slate-400' }}">
+                                {{ $product->stock_quantity }} في المخزن
+                            </p>
+                        </div>
+                    </button>
+                    <div class="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button wire:click="editProduct({{ $product->id }})" class="p-2 text-indigo-500 hover:bg-indigo-50 bg-white rounded-lg shadow-sm border border-slate-200" title="تعديل">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </button>
+                        <button onclick="confirm('هل أنت متأكد من حذف المنتج نهائياً؟') || event.stopImmediatePropagation()" wire:click="deleteProduct({{ $product->id }})" class="p-2 text-rose-500 hover:bg-rose-50 bg-white rounded-lg shadow-sm border border-slate-200" title="حذف">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
                     </div>
-                    <div class="flex-1">
-                        <h5 class="text-sm font-bold text-slate-900">{{ $product->name }}</h5>
-                        <p class="text-xs text-slate-500">باركود: {{ $product->barcode }}</p>
-                    </div>
-                    <div class="text-left">
-                        <p class="text-sm font-bold text-indigo-600">${{ number_format($product->sale_price, 2) }}</p>
-                        <p class="text-[10px] uppercase font-bold {{ $product->stock_quantity <= 5 ? 'text-rose-500' : 'text-slate-400' }}">
-                            {{ $product->stock_quantity }} في المخزن
-                        </p>
-                    </div>
-                </button>
+                </div>
                 @empty
                     @if(strlen($search) > 0)
                     <p class="text-slate-400 text-sm text-center py-8 italic">لم يتم العثور على "{{ $search }}"</p>
@@ -78,9 +88,14 @@
                     <div class="text-left min-w-[80px]">
                         <p class="font-bold text-slate-900">${{ number_format($item['price'] * $item['quantity'], 2) }}</p>
                     </div>
-                    <button wire:click="removeFromCart({{ $id }})" class="p-2 text-slate-300 hover:text-rose-500 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    </button>
+                    <div class="flex items-center gap-1">
+                        <button wire:click="editProduct({{ $id }})" class="p-2 text-slate-300 hover:text-indigo-500 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </button>
+                        <button wire:click="removeFromCart({{ $id }})" class="p-2 text-slate-300 hover:text-rose-500 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
             @empty
@@ -266,21 +281,92 @@
         </div>
     </div>
 
+    <!-- Edit Product Modal -->
+    <div x-cloak x-show="$wire.showEditModal" class="fixed inset-0 z-[110] overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen p-4 text-center">
+            <div x-show="$wire.showEditModal" @click="$wire.set('showEditModal', false)" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+            
+            <div class="inline-block align-middle bg-white rounded-3xl text-right overflow-hidden shadow-2xl transform transition-all sm:max-w-lg sm:w-full border border-slate-100 relative z-20">
+                <div class="p-8">
+                    <h3 class="text-2xl font-black text-slate-900 mb-6">تعديل بيانات المنتج</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">اسم المنتج</label>
+                                <input type="text" wire:model="editingProductData.name" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-right">
+                                @error('editingProductData.name') <span class="text-xs text-rose-500">{{ $message }}</span> @enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">القسم</label>
+                                <select wire:model="editingProductData.category_id" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-right cursor-pointer">
+                                    <option value="">اختر القسم</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('editingProductData.category_id') <span class="text-xs text-rose-500">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">الباركود</label>
+                                <input type="text" wire:model="editingProductData.barcode" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-right">
+                                @error('editingProductData.barcode') <span class="text-xs text-rose-500">{{ $message }}</span> @enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">تاريخ الصلاحية</label>
+                                <input type="date" wire:model="editingProductData.expiry_date" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-right">
+                                @error('editingProductData.expiry_date') <span class="text-xs text-rose-500">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">سعر الشراء</label>
+                                <input type="number" step="0.01" wire:model="editingProductData.purchase_price" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-right">
+                                @error('editingProductData.purchase_price') <span class="text-xs text-rose-500">{{ $message }}</span> @enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">سعر البيع</label>
+                                <input type="number" step="0.01" wire:model="editingProductData.sale_price" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-right font-bold text-indigo-600">
+                                @error('editingProductData.sale_price') <span class="text-xs text-rose-500">{{ $message }}</span> @enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">الكمية</label>
+                                <input type="number" wire:model="editingProductData.stock_quantity" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-right font-bold">
+                                @error('editingProductData.stock_quantity') <span class="text-xs text-rose-500">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">حد تنبيه المخزون</label>
+                            <input type="number" wire:model="editingProductData.low_stock_threshold" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-right">
+                            @error('editingProductData.low_stock_threshold') <span class="text-xs text-rose-500">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex gap-4">
+                        <button @click="$wire.set('showEditModal', false)" class="flex-1 px-6 py-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-2xl transition-colors">إلغاء</button>
+                        <button wire:click="updateProduct" class="flex-1 px-6 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-lg shadow-indigo-600/20 transition-all">حفظ التغييرات</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <style>
         [x-cloak] { display: none !important; }
+        
         /* ─── PROFESSIONAL RECEIPT STYLES ─────────────────────────── */
-        .inv-hdr { text-align: center; }
-        .inv-meta { font-family: 'Inter', sans-serif; }
-        .inv-tbl th { font-family: 'Inter', sans-serif; }
-        .inv-tbl td { font-family: 'Inter', sans-serif; }
-
         @media print {
             @page {
                 size: 80mm auto;
                 margin: 0;
             }
             
-            /* Force exact colors to show on printer */
+            /* Reset everything for print */
             * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
@@ -288,146 +374,143 @@
                 box-shadow: none !important;
                 text-shadow: none !important;
                 font-family: 'Arial', sans-serif !important;
+                box-sizing: border-box !important;
+                margin: 0;
+                padding: 0;
             }
 
-            /* Reset any overflow on body/html */
-            html, body {
-                overflow: visible !important;
-                height: auto !important;
+            body {
+                background: white !important;
+                width: 100% !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                background: white !important;
-                width: 80mm !important;
+                overflow: visible !important;
             }
 
-            /* Hide everything else */
-            aside, header, #toasts, #pos-view, .fixed.inset-0.bg-slate-900\/80, .no-print, [x-show="!open"] {
+            /* Hide UI elements */
+            .no-print, aside, header, nav, #toasts, .bg-slate-900\/80, button, .backdrop-blur-md {
                 display: none !important;
             }
 
-            /* Override main layout constraints */
-            main {
-                min-height: auto !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                display: block !important;
-                width: 80mm !important;
-            }
-
-            /* Fix Modal for Print */
+            /* Container for Receipt */
             #inv-modal {
-                position: static !important;
-                display: block !important;
-                width: 80mm !important;
-                min-height: auto !important;
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 80mm !important; /* Default for 80mm */
                 margin: 0 !important;
                 padding: 0 !important;
-                background: white !important;
-                visibility: visible !important;
-                transform: none !important;
-                opacity: 1 !important;
-            }
-
-            #inv-modal > div {
-                min-height: auto !important;
-                padding: 0 !important;
                 display: block !important;
-                position: static !important;
+                background: white !important;
+                box-shadow: none !important;
+                border: none !important;
             }
 
-            /* Reset the layout of modal container */
+            /* Adjust for 58mm if needed via width override */
+            @media (max-width: 58mm) {
+                #inv-modal {
+                    width: 58mm !important;
+                }
+            }
+
             .inline-block.align-middle {
                 display: block !important;
-                width: 80mm !important;
-                max-width: 80mm !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                border: none !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                border-radius: 0 !important;
                 box-shadow: none !important;
-                transform: none !important;
-                border-radius: 0 !important;
-                position: static !important;
-            }
-
-            #inv-modal .bg-indigo-600 {
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                background-color: #4f46e5 !important;
-                padding: 5mm 3mm !important;
-                border-radius: 0 !important;
-                width: 80mm !important;
-                box-sizing: border-box !important;
-            }
-
-            #inv-modal h3 {
-                color: white !important;
-                font-size: 15px !important;
+                border: none !important;
                 margin: 0 !important;
-                line-height: 1.2 !important;
-                font-weight: 900 !important;
             }
 
-            #inv-modal .w-24.h-24 {
-                width: 12mm !important;
-                height: 12mm !important;
+            /* Receipt Header */
+            .bg-indigo-600 {
                 background-color: white !important;
-                color: #4f46e5 !important;
-                border-radius: 3mm !important;
-                margin-bottom: 2mm !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
+                color: black !important;
+                padding: 5mm 0 !important;
+                border-bottom: 1px dashed #000 !important;
             }
 
-            #inv-modal .w-24.h-24 svg {
-                width: 8mm !important;
-                height: 8mm !important;
+            .bg-indigo-600 h3 {
+                color: black !important;
+                font-size: 14pt !important;
+                font-weight: bold !important;
             }
 
-            /* Hide background blur effects in print */
-            #inv-modal .blur-3xl, #inv-modal .bg-\[radial-gradient\.\.\.\] {
+            .bg-indigo-600 .w-24.h-24, .bg-indigo-600 .bg-white\/10, .bg-indigo-600 .bg-indigo-500\/20 {
                 display: none !important;
+            }
+
+            .bg-indigo-600 .flex.items-center.gap-2.mt-4 {
+                display: none !important;
+            }
+
+            /* Receipt Content */
+            .p-10 {
+                padding: 2mm !important;
             }
 
             #inv-content {
-                display: block !important;
                 background: white !important;
-                padding: 3mm !important;
                 border: none !important;
+                padding: 0 !important;
                 margin: 0 !important;
-                width: 80mm !important;
-                box-sizing: border-box !important;
-                color: #000 !important; 
+            }
+
+            #inv-content * {
+                color: black !important;
+                font-size: 9pt !important;
+                line-height: 1.4 !important;
+            }
+
+            #inv-content h4 {
+                font-size: 12pt !important;
+                margin-bottom: 1mm !important;
+            }
+
+            .inv-tbl {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                margin: 3mm 0 !important;
             }
 
             .inv-tbl th {
-                color: #4f46e5 !important;
-                border-bottom: 1px solid #e2e8f0 !important;
-                font-size: 10px !important;
+                border-bottom: 1px solid #000 !important;
+                padding: 1mm 0 !important;
+                font-size: 8pt !important;
             }
 
             .inv-tbl td {
-                font-size: 11px !important;
                 padding: 2mm 0 !important;
+                border-bottom: 0.5px solid #eee !important;
+                vertical-align: top !important;
+            }
+
+            /* Prevent long product names from breaking layout */
+            .inv-tbl td div {
+                word-break: break-word !important;
+                max-width: 40mm !important;
+            }
+
+            .inv-tot {
+                border-top: 1px dashed #000 !important;
+                padding-top: 2mm !important;
+            }
+
+            .inv-tot .text-2xl {
+                font-size: 14pt !important;
+                font-weight: bold !important;
             }
 
             .text-indigo-600 {
-                color: #4338ca !important;
-                font-weight: 900 !important;
+                color: black !important;
             }
 
-            .inv-tbl { display: table !important; width: 100% !important; border-collapse: collapse !important; }
-            .inv-tbl tr { display: table-row !important; }
-            .inv-tbl th, .inv-tbl td { display: table-cell !important; }
-            .inv-tot { display: flex !important; border-top: 2px solid #000 !important; padding-top: 2mm !important; margin-top: 2mm !important; }
-        }
-    </style>
-    <style>
-        @media print {
-            body, html { overflow: visible !important; height: auto !important; width: 80mm !important; }
-            #inv-modal { visibility: visible !important; position: static !important; }
-            .no-print { display: none !important; }
+            /* Footer */
+            .pt-8 {
+                padding-top: 4mm !important;
+                border-top: 1px dashed #000 !important;
+            }
         }
     </style>
 </div>

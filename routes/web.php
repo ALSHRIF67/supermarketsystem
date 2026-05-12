@@ -37,6 +37,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('customers', \App\Http\Controllers\CustomerController::class);
     Route::resource('suppliers', \App\Http\Controllers\SupplierController::class);
     Route::resource('expenses', \App\Http\Controllers\ExpenseController::class);
+    Route::post('/expense-categories', [\App\Http\Controllers\ExpenseController::class, 'storeCategory'])->name('expense-categories.store');
+
     
     // Reports & Analytics
     Route::get('/reports', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');

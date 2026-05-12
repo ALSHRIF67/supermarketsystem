@@ -34,7 +34,7 @@ class ExpenseController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'expense_category_id' => 'required|exists:expense_categories,id',
             'amount' => 'required|numeric|min:0',
             'expense_date' => 'required|date',
@@ -42,7 +42,9 @@ class ExpenseController extends Controller
             'reference_number' => 'nullable|string|max:255',
         ]);
 
-        Expense::create($request->all());
+        $validated['user_id'] = auth()->id();
+
+        Expense::create($validated);
 
         return redirect()->route('expenses.index')
             ->with('success', 'Expense recorded successfully.');
@@ -56,7 +58,7 @@ class ExpenseController extends Controller
 
     public function update(Request $request, Expense $expense)
     {
-        $request->validate([
+        $validated = $request->validate([
             'expense_category_id' => 'required|exists:expense_categories,id',
             'amount' => 'required|numeric|min:0',
             'expense_date' => 'required|date',
@@ -64,7 +66,7 @@ class ExpenseController extends Controller
             'reference_number' => 'nullable|string|max:255',
         ]);
 
-        $expense->update($request->all());
+        $expense->update($validated);
 
         return redirect()->route('expenses.index')
             ->with('success', 'Expense updated successfully.');
@@ -76,5 +78,16 @@ class ExpenseController extends Controller
 
         return redirect()->route('expenses.index')
             ->with('success', 'Expense deleted successfully.');
+    }
+
+    public function storeCategory(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:expense_categories',
+        ]);
+
+        ExpenseCategory::create($request->only('name'));
+
+        return back()->with('success', 'Expense category added successfully.');
     }
 }

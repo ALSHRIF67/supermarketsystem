@@ -27,11 +27,16 @@ class ReportController extends Controller
 
         $topProducts = DB::table('sale_items')
             ->join('products', 'sale_items.product_id', '=', 'products.id')
-            ->select('products.name', DB::raw('SUM(sale_items.quantity) as total_qty'), DB::raw('SUM(sale_items.subtotal) as total_revenue'))
+            ->select(
+                'products.name', 
+                'products.barcode',
+                DB::raw('SUM(sale_items.quantity) as sold_count'), 
+                DB::raw('SUM(sale_items.subtotal) as total_revenue')
+            )
             ->whereBetween('sale_items.created_at', [$startDate, $endDate])
-            ->groupBy('products.id', 'products.name')
-            ->orderBy('total_qty', 'desc')
-            ->take(5)
+            ->groupBy('products.id', 'products.name', 'products.barcode')
+            ->orderBy('sold_count', 'desc')
+            ->take(10)
             ->get();
 
         $lowStockProducts = Product::lowStock()->get();

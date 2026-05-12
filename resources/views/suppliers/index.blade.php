@@ -1,67 +1,95 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex flex-col gap-6">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-            <h2 class="text-xl font-semibold text-slate-800">الموردين</h2>
-            <p class="text-sm text-slate-500">إدارة موردي المنتجات والشركات</p>
+<div class="space-y-8 animate-slide-up">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="space-y-1">
+            <h2 class="text-3xl font-black text-slate-900 tracking-tight">الموردين</h2>
+            <p class="text-sm font-medium text-slate-500 flex items-center gap-2">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                إدارة موردي المنتجات وشركات التوزيع
+            </p>
         </div>
-        <a href="{{ route('suppliers.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            إضافة مورد
-        </a>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('suppliers.create') }}" class="btn-premium flex items-center gap-2 px-6 py-3 bg-slate-900 hover:bg-slate-800 shadow-slate-900/10">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                <span class="font-black">إضافة مورد جديد</span>
+            </a>
+        </div>
     </div>
 
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <!-- Main Table Area -->
+    <div class="premium-table-container">
         <div class="overflow-x-auto">
-            <table class="w-full text-right border-collapse">
+            <table class="premium-table">
                 <thead>
-                    <tr class="bg-slate-50 border-b border-slate-200">
-                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">اسم المورد</th>
-                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">الشخص المسؤول</th>
-                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">معلومات الاتصال</th>
-                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-left">الإجراءات</th>
+                    <tr>
+                        <th class="w-1/3">اسم الشركة / المورد</th>
+                        <th class="text-center">المسؤول</th>
+                        <th class="text-center">معلومات الاتصال</th>
+                        <th class="text-left">التحكم</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-200">
+                <tbody>
                     @forelse($suppliers as $supplier)
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4">
-                            <span class="text-sm font-semibold text-slate-900">{{ $supplier->name }}</span>
+                    <tr>
+                        <td>
+                            <div class="flex items-center gap-5">
+                                <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100 group-hover:bg-white transition-colors">
+                                    <svg class="w-7 h-7 text-slate-400 group-hover:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                </div>
+                                <div class="space-y-0.5">
+                                    <span class="block text-base font-black text-slate-900 leading-tight tracking-tight">{{ $supplier->name }}</span>
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">كود المورد: #SUP-{{ str_pad($supplier->id, 4, '0', STR_PAD_LEFT) }}</span>
+                                </div>
+                            </div>
                         </td>
-                        <td class="px-6 py-4 text-center">
-                            <span class="text-sm text-slate-600">{{ $supplier->contact_person ?: 'N/A' }}</span>
+                        <td class="text-center">
+                            <span class="px-4 py-2 bg-slate-50 text-slate-600 rounded-xl text-[11px] font-black uppercase tracking-widest border border-slate-100">
+                                {{ $supplier->contact_person ?: 'غير محدد' }}
+                            </span>
                         </td>
-                        <td class="px-6 py-4 text-center">
-                            <div class="text-sm text-slate-600">{{ $supplier->email ?: 'لا يوجد بريد' }}</div>
-                            <div class="text-xs text-slate-400">{{ $supplier->phone ?: 'لا يوجد هاتف' }}</div>
+                        <td class="text-center">
+                            <div class="space-y-1">
+                                <span class="block text-sm font-black text-slate-900 leading-tight">{{ $supplier->phone ?: '───' }}</span>
+                                <span class="text-[10px] font-bold text-slate-400 block truncate max-w-[200px] mx-auto uppercase tracking-widest">{{ $supplier->email ?: '───' }}</span>
+                            </div>
                         </td>
-                        <td class="px-6 py-4 text-left space-x-reverse space-x-3">
-                            <a href="{{ route('suppliers.edit', $supplier) }}" class="text-slate-400 hover:text-indigo-600 transition-colors">
-                                <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                            </a>
-                            <form action="{{ route('suppliers.destroy', $supplier) }}" method="POST" class="inline" onsubmit="return confirm('هل أنت متأكد؟')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-slate-400 hover:text-rose-600 transition-colors">
-                                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                </button>
-                            </form>
+                        <td class="text-left">
+                            <div class="flex items-center justify-end gap-3">
+                                <a href="{{ route('suppliers.edit', $supplier) }}" class="w-11 h-11 flex items-center justify-center bg-white border border-slate-200 text-slate-400 hover:text-emerald-500 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-500/10 rounded-2xl transition-all" title="تعديل">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </a>
+                                <form action="{{ route('suppliers.destroy', $supplier) }}" method="POST" class="inline" onsubmit="return confirm('هل أنت متأكد من حذف هذا المورد؟')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="w-11 h-11 flex items-center justify-center bg-white border border-slate-200 text-slate-400 hover:text-rose-500 hover:border-rose-200 hover:shadow-xl hover:shadow-rose-500/10 rounded-2xl transition-all" title="حذف">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="px-6 py-12 text-center text-slate-500 italic">
-                            لا يوجد موردين مضافين.
+                        <td colspan="4" class="p-0">
+                            <div class="premium-card p-20 flex flex-col items-center justify-center text-slate-400 text-center">
+                                <div class="w-24 h-24 bg-slate-50 rounded-[2.5rem] flex items-center justify-center mb-6 border border-slate-100">
+                                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                </div>
+                                <h3 class="text-xl font-black text-slate-900">لا يوجد موردين مضافين</h3>
+                                <p class="text-sm font-bold text-slate-400 mt-2 uppercase tracking-widest">ابدأ بإضافة الموردين لإدارة مخزونك وسلاسل الإمداد</p>
+                            </div>
                         </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+        
         @if($suppliers->hasPages())
-        <div class="px-6 py-4 border-t border-slate-200">
+        <div class="mt-8 px-8 py-6 premium-card border-none">
             {{ $suppliers->links() }}
         </div>
         @endif

@@ -202,7 +202,7 @@ class POS extends Component
         $saleData = DB::transaction(function () {
             $sale = Sale::create([
                 'user_id' => auth()->id(),
-                'customer_id' => $this->selectedCustomer,
+                'customer_id' => $this->selectedCustomer ?: null,
                 'invoice_number' => 'INV-' . strtoupper(uniqid()),
                 'total_amount' => $this->total,
                 'discount_amount' => $this->discount,

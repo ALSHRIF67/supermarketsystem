@@ -11,7 +11,7 @@
     <div class="min-h-screen flex items-center justify-center p-6">
         <div class="max-w-md w-full">
             <div class="text-center mb-10">
-                <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
+                <div class="w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-200">
                     <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                     </svg>
@@ -31,7 +31,7 @@
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.206"></path></svg>
                                 </span>
                                 <input type="email" name="email" id="email" value="{{ old('email') }}" 
-                                    class="w-full pl-10 pr-4 py-3 rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50/50 transition-all"
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50/50 transition-all"
                                     placeholder="admin@marketos.com" required autofocus>
                             </div>
                             @error('email') <p class="mt-2 text-xs text-rose-500">{{ $message }}</p> @enderror
@@ -40,20 +40,20 @@
                         <div>
                             <div class="flex items-center justify-between mb-2">
                                 <label for="password" class="block text-sm font-semibold text-slate-700">Password</label>
-                                <a href="#" class="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">Forgot?</a>
+                                <a href="#" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors">Forgot?</a>
                             </div>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                                 </span>
                                 <input type="password" name="password" id="password" 
-                                    class="w-full pl-10 pr-4 py-3 rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50/50 transition-all"
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50/50 transition-all"
                                     placeholder="••••••••" required>
                             </div>
                         </div>
 
                         <div class="flex items-center">
-                            <input type="checkbox" name="remember" id="remember" class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500">
+                            <input type="checkbox" name="remember" id="remember" class="w-4 h-4 text-emerald-600 border-slate-300 rounded focus:ring-emerald-500">
                             <label for="remember" class="ml-2 text-sm text-slate-600">Remember me</label>
                         </div>
 
@@ -67,7 +67,7 @@
                 <div class="mt-6 pt-6 border-t border-slate-100 text-center">
                     <p class="text-sm text-slate-500">
                         Don't have an account? 
-                        <a href="{{ route('register') }}" class="font-bold text-indigo-600 hover:text-indigo-700">Create One</a>
+                        <a href="{{ route('register') }}" class="font-bold text-emerald-600 hover:text-emerald-700">Create One</a>
                     </p>
                 </div>
             </div>

@@ -197,8 +197,8 @@
                             <td class="py-6 text-center">
                                 <span class="inline-flex w-10 h-10 items-center justify-center bg-slate-100 rounded-xl font-black text-slate-900">{{ $item->quantity }}</span>
                             </td>
-                            <td class="py-6 text-left font-bold text-slate-500">${{ number_format($item->unit_price, 2) }}</td>
-                            <td class="py-6 text-left font-black text-slate-900 text-lg">${{ number_format($item->subtotal, 2) }}</td>
+                            <td class="py-6 text-left font-bold text-slate-500">{{ number_format($item->unit_price, 2) }} <span class="text-[10px]">ج.س</span></td>
+                            <td class="py-6 text-left font-black text-slate-900 text-lg">{{ number_format($item->subtotal, 2) }} <span class="text-xs">ج.س</span></td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -213,17 +213,17 @@
                 <div class="w-full md:w-80 space-y-4">
                     <div class="flex justify-between items-center text-slate-500 font-bold px-4">
                         <span class="text-[10px] uppercase tracking-widest">المجموع الفرعي</span>
-                        <span class="text-base">${{ number_format($sale->total_amount, 2) }}</span>
+                        <span class="text-base">{{ number_format($sale->total_amount, 2) }} <span class="text-xs">ج.س</span></span>
                     </div>
                     @if($sale->discount_amount > 0)
                     <div class="flex justify-between items-center text-rose-600 font-black px-4 bg-rose-50 py-3 rounded-2xl">
                         <span class="text-[10px] uppercase tracking-widest">قيمة الخصم (-)</span>
-                        <span class="text-base">-${{ number_format($sale->discount_amount, 2) }}</span>
+                        <span class="text-base">-{{ number_format($sale->discount_amount, 2) }} <span class="text-xs">ج.س</span></span>
                     </div>
                     @endif
                     <div class="flex justify-between items-center bg-emerald-600 text-white p-6 rounded-[2rem] shadow-xl shadow-emerald-600/20 transform hover:scale-105 transition-transform">
                         <span class="text-xs font-black uppercase tracking-widest">إجمالي المدفوع</span>
-                        <span class="text-3xl font-black">${{ number_format($sale->payable_amount, 2) }}</span>
+                        <span class="text-3xl font-black">{{ number_format($sale->payable_amount, 2) }} <span class="text-lg">ج.س</span></span>
                     </div>
                 </div>
             </div>

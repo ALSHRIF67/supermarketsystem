@@ -161,31 +161,43 @@
 
         /* Table Modernization - Premium SaaS Style */
         .premium-table-container {
-            @apply bg-transparent;
+            @apply w-full bg-transparent overflow-hidden;
+            min-height: 500px; /* Ensure tables have presence */
         }
 
         .premium-table {
             @apply w-full text-right border-separate;
-            border-spacing: 0 0.75rem;
+            border-spacing: 0 0.5rem; /* Reduced spacing for more data visibility */
+        }
+
+        .premium-table thead {
+            @apply sticky top-0 z-20 bg-slate-50/95 backdrop-blur-sm;
         }
 
         .premium-table thead th {
-            @apply px-8 py-4 text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 border-none;
+            @apply px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100;
         }
 
         .premium-table tbody tr {
             @apply bg-white shadow-sm transition-all duration-300 relative;
-            border-radius: 1.25rem;
         }
 
         .premium-table tbody tr:hover {
-            @apply shadow-lg transform -translate-y-0.5 z-10;
+            @apply shadow-md transform -translate-y-0.5 z-10;
             background-color: #fcfdfd;
         }
 
         .premium-table td {
-            @apply px-8 py-6 text-sm text-slate-600 border-y border-transparent first:border-r first:rounded-r-2xl last:border-l last:rounded-l-2xl transition-all;
-            border-color: rgba(226, 232, 240, 0.4);
+            @apply px-6 py-5 text-sm text-slate-600 border-y border-transparent transition-all;
+            border-color: rgba(226, 232, 240, 0.3);
+        }
+
+        .premium-table td:first-child {
+            @apply border-r rounded-r-xl;
+        }
+
+        .premium-table td:last-child {
+            @apply border-l rounded-l-xl;
         }
 
         .premium-table tr:hover td {
@@ -249,7 +261,7 @@
         <!-- Sidebar -->
         <aside 
             :class="sidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'"
-            class="fixed md:sticky top-0 right-0 w-72 h-screen bg-slate-900 text-white flex-shrink-0 transition-transform duration-300 z-50 no-print shadow-2xl">
+            class="fixed md:sticky top-0 right-0 w-72 h-screen bg-slate-900 text-white flex-shrink-0 transition-transform duration-300 z-50 no-print shadow-2xl overflow-hidden flex flex-col">
             
             <div class="p-8 flex items-center gap-4">
                 <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-900/20">
@@ -312,7 +324,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 min-w-0 overflow-y-auto">
+        <main class="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
             <header class="bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 md:px-10 py-5 flex items-center justify-between sticky top-0 z-10 no-print">
                 <div class="flex items-center gap-6">
                     <button @click="sidebarOpen = !sidebarOpen" class="md:hidden p-2 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">
@@ -338,8 +350,10 @@
                     </div>
                 </div>
             </header>
+            
+            <div class="flex-1 overflow-y-auto custom-scrollbar">
 
-            <div class="p-4 md:p-8">
+            <div class="p-6 md:p-8 flex-1 flex flex-col w-full h-full">
                 @if(session('success'))
                     <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center gap-3">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -356,6 +370,7 @@
 
                 {{ $slot ?? '' }}
                 @yield('content')
+            </div>
             </div>
         </main>
     </div>

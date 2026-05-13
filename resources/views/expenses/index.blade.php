@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-8 animate-slide-up">
+<div class="flex-1 flex flex-col space-y-8 animate-slide-up w-full">
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div class="space-y-1">
-            <h2 class="text-3xl font-black text-slate-900 tracking-tight">المصروفات</h2>
-            <p class="text-sm font-medium text-slate-500 flex items-center gap-2">
+            <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">المصروفات</h2>
+            <p class="text-xs md:text-sm font-medium text-slate-500 flex items-center gap-2">
                 <span class="w-2 h-2 bg-rose-500 rounded-full"></span>
                 تتبع وإدارة تكاليف تشغيل السوبر ماركت والمدفوعات
             </p>
@@ -25,7 +25,7 @@
         <div class="lg:col-span-3 premium-card p-6 border-slate-100">
             <form action="{{ route('expenses.index') }}" method="GET" class="flex flex-col md:flex-row gap-6">
                 <div class="w-full md:w-64 space-y-2">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 pr-2">الفئة</label>
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 pr-2">الفئة</label>
                     <select name="category" class="w-full px-4 py-3.5 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-emerald-500 focus:bg-white focus:ring-0 outline-none transition-all font-bold text-sm appearance-none cursor-pointer">
                         <option value="">جميع الفئات</option>
                         @foreach($categories as $category)
@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="flex-1 space-y-2">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 pr-2">التاريخ</label>
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 pr-2">التاريخ</label>
                     <input type="date" name="date" value="{{ request('date') }}" 
                         class="w-full px-4 py-3.5 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-emerald-500 focus:bg-white focus:ring-0 outline-none transition-all font-bold text-sm">
                 </div>
@@ -67,59 +67,65 @@
         </div>
     </div>
 
-    <!-- Main Table Area -->
-    <div class="premium-table-container">
-        <div class="overflow-x-auto">
-            <table class="premium-table">
+    <!-- Desktop Optimized Table -->
+    <!-- Expenses List Area -->
+    <div class="flex-1">
+        <!-- Desktop/Tablet View (Table) -->
+        <div class="hidden md:block premium-table-container">
+            <table class="premium-table w-full">
                 <thead>
                     <tr>
-                        <th class="w-32">التاريخ</th>
-                        <th>الفئة</th>
-                        <th class="text-center">الوصف والمرجع</th>
-                        <th class="text-center">المبلغ</th>
-                        <th class="text-left">التحكم</th>
+                        <th class="w-[12%] text-right">التاريخ</th>
+                        <th class="w-[15%] text-right">الفئة</th>
+                        <th class="w-[35%] text-center">الوصف والمرجع</th>
+                        <th class="w-[18%] text-center">المبلغ</th>
+                        <th class="w-[20%] text-left">التحكم</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($expenses as $expense)
                     <tr>
                         <td>
-                            <div class="flex flex-col">
+                            <div class="flex flex-col items-start">
                                 <span class="text-base font-black text-slate-900 tracking-tight">
                                     {{ \Carbon\Carbon::parse($expense->expense_date)->format('d') }}
                                 </span>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                                     {{ \Carbon\Carbon::parse($expense->expense_date)->translatedFormat('M Y') }}
                                 </span>
                             </div>
                         </td>
                         <td>
-                            <span class="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-[11px] font-black uppercase tracking-widest">
+                            <span class="inline-block px-3 py-1.5 bg-slate-100 text-slate-600 rounded-xl text-[11px] font-black uppercase tracking-widest">
                                 {{ $expense->category->name }}
                             </span>
                         </td>
                         <td class="text-center">
-                            <div class="space-y-1">
-                                <span class="block text-sm font-black text-slate-900 leading-tight">Ref: #{{ $expense->reference_number ?: '───' }}</span>
-                                <span class="text-[10px] font-bold text-slate-400 block truncate max-w-[250px] mx-auto">{{ $expense->description ?: 'لا يوجد وصف مضاف' }}</span>
+                            <div class="space-y-0.5">
+                                <span class="block text-sm font-black text-slate-900 leading-tight">
+                                    Ref: #{{ $expense->reference_number ?: '──────' }}
+                                </span>
+                                <span class="text-[10px] font-bold text-slate-500 block truncate max-w-[280px] mx-auto">
+                                    {{ $expense->description ?: 'لا يوجد وصف مضاف' }}
+                                </span>
                             </div>
                         </td>
                         <td class="text-center">
                             <div class="inline-flex flex-col items-center">
-                                <span class="text-lg font-black text-rose-600 tracking-tight">{{ number_format($expense->amount, 2) }}</span>
-                                <span class="text-[10px] font-black text-rose-400 uppercase tracking-widest -mt-1">ج.س</span>
+                                <span class="text-base font-black text-rose-600 tracking-tight">{{ number_format($expense->amount, 2) }}</span>
+                                <span class="text-[9px] font-black text-rose-400 uppercase tracking-widest">ج.س</span>
                             </div>
                         </td>
                         <td class="text-left">
-                            <div class="flex items-center justify-end gap-3">
-                                <a href="{{ route('expenses.edit', $expense) }}" class="w-11 h-11 flex items-center justify-center bg-white border border-slate-200 text-slate-400 hover:text-emerald-500 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-500/10 rounded-2xl transition-all" title="تعديل">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="{{ route('expenses.edit', $expense) }}" class="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 text-slate-400 hover:text-emerald-500 hover:border-emerald-200 rounded-xl transition-all shadow-sm" title="تعديل">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                 </a>
                                 <form action="{{ route('expenses.destroy', $expense) }}" method="POST" class="inline" onsubmit="return confirm('هل أنت متأكد من حذف هذا السجل؟')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="w-11 h-11 flex items-center justify-center bg-white border border-slate-200 text-slate-400 hover:text-rose-500 hover:border-rose-200 hover:shadow-xl hover:shadow-rose-500/10 rounded-2xl transition-all" title="حذف">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    <button type="submit" class="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 text-slate-400 hover:text-rose-500 hover:border-rose-200 rounded-xl transition-all shadow-sm" title="حذف">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
                                 </form>
                             </div>
@@ -141,6 +147,59 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Mobile View (Cards) -->
+        <div class="md:hidden space-y-4">
+            @forelse($expenses as $expense)
+            <div class="premium-card p-5 bg-white border-slate-100 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-900 font-black border border-slate-100">
+                            {{ \Carbon\Carbon::parse($expense->expense_date)->format('d') }}
+                        </div>
+                        <div>
+                            <span class="block text-xs font-black text-slate-900">{{ \Carbon\Carbon::parse($expense->expense_date)->translatedFormat('M Y') }}</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $expense->category->name }}</span>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="block text-sm font-black text-rose-600">{{ number_format($expense->amount, 2) }}</span>
+                        <span class="text-[9px] font-black text-rose-400 uppercase tracking-widest">ج.س</span>
+                    </div>
+                </div>
+                
+                <div class="py-3 border-y border-slate-50 space-y-1">
+                    <span class="block text-[10px] font-black text-slate-400 uppercase tracking-widest">البيان / المرجع</span>
+                    <p class="text-xs font-bold text-slate-600 leading-relaxed">{{ $expense->description ?: 'لا يوجد وصف مضاف' }}</p>
+                    <span class="inline-block px-2 py-1 bg-slate-50 text-[9px] font-black text-slate-400 rounded-lg mt-1">#{{ $expense->reference_number ?: 'بدون مرجع' }}</span>
+                </div>
+
+                <div class="flex items-center justify-end gap-2">
+                    <a href="{{ route('expenses.edit', $expense) }}" class="flex-1 h-11 flex items-center justify-center bg-white border border-slate-200 text-slate-600 rounded-xl font-black text-xs gap-2 transition-all active:scale-95">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        تعديل
+                    </a>
+                    <form action="{{ route('expenses.destroy', $expense) }}" method="POST" class="flex-1" onsubmit="return confirm('هل أنت متأكد من حذف هذا السجل؟')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="w-full h-11 flex items-center justify-center bg-white border border-rose-100 text-rose-500 rounded-xl font-black text-xs gap-2 transition-all active:scale-95">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            حذف
+                        </button>
+                    </form>
+                </div>
+            </div>
+            @empty
+            <div class="premium-card p-12 flex flex-col items-center justify-center text-slate-400 text-center">
+                <div class="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center mb-6 border border-slate-100">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-lg font-black text-slate-900">لا توجد سجلات مصروفات</h3>
+                <p class="text-xs font-bold text-slate-500 mt-2 uppercase tracking-widest">ابدأ بتسجيل المصروفات الآن</p>
+            </div>
+            @endforelse
+        </div>
+    </div>
         
         @if($expenses->hasPages())
         <div class="mt-8 px-8 py-6 premium-card border-none">

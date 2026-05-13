@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-10 animate-slide-up" wire:poll.30s>
+<div class="flex-1 flex flex-col gap-10 animate-slide-up w-full" wire:poll.30s>
     <!-- Welcome Header -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
@@ -70,7 +70,7 @@
     <!-- Tables & Insights Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Top Products Table -->
-        <div class="lg:col-span-2 premium-card overflow-hidden">
+        <div class="lg:col-span-2 premium-card overflow-hidden flex flex-col">
             <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                 <div>
                     <h3 class="font-black text-slate-900 text-lg">المنتجات الأكثر مبيعاً</h3>

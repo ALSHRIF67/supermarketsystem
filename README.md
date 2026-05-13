@@ -1,58 +1,80 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Supermarket Management System (MarketOS) 🛒
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A comprehensive, high-fidelity ERP solution built with **Laravel 11**, designed for modern supermarket and pharmacy management. This system features the **MarketOS** UI design, providing a premium, responsive experience across all devices.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🌟 Key Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **🚀 Advanced POS System**: Real-time point of sale with multi-payment support (Cash, Card, Credit).
+- **📦 Inventory & Logistics**: Multi-warehouse stock tracking, replenishment, and internal transfers.
+- **📊 Strategic Analytics**: Real-time reports for revenue, expenses, profit, and top-selling products.
+- **👥 CRM & SRM**: Comprehensive database for Customers and Suppliers with historical tracking.
+- **💸 Expense Management**: Detailed tracking of operational costs with category-based filtering.
+- **🛡️ Security**: Role-based access control and secure transaction logging.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🎨 MarketOS UI Modernization
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+The system has been fully refactored to follow the **MarketOS** design philosophy:
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **📱 Dual-Layout Responsive System**: All management tables automatically convert into sleek data cards on mobile devices, ensuring **Zero Horizontal Scrolling**.
+- **💎 Premium Aesthetics**: A refined **Emerald/Slate/Rose** color palette optimized for business readability and visual hierarchy.
+- **👆 Touch-Optimized**: High-density typography and large touch targets designed for tablets and smartphones.
+- **⚡ Micro-Animations**: Smooth transitions and interactive elements for a superior user experience.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 🛠 Tech Stack
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+- **Framework**: [Laravel 11](https://laravel.com)
+- **Frontend**: [Tailwind CSS](https://tailwindcss.com), [Livewire](https://livewire.laravel.com)
+- **Database**: MySQL / PostgreSQL
+- **Design System**: MarketOS Premium UI
 
-```bash
-composer require laravel/boost --dev
+---
 
-php artisan boost:install
-```
+## 🚀 Installation & Setup
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/ALSHRIF67/supermarketsystem.git
+   ```
 
-## Contributing
+2. **Install dependencies**:
+   ```bash
+   composer install
+   npm install
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. **Environment Setup**:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-## Code of Conduct
+4. **Database Configuration**:
+   Update your `.env` with your database credentials, then run:
+   ```bash
+   php artisan migrate --seed
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+5. **Build Assets**:
+   ```bash
+   npm run dev
+   ```
 
-## Security Vulnerabilities
+6. **Serve the Application**:
+   ```bash
+   php artisan serve
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 📄 License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+---
+*Built with ❤️ for advanced business management.*
